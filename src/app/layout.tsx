@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://swapi.dev/api";
 
 const inter = Inter({ subsets: ["latin"] });
 

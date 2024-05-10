@@ -1,8 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import movieReducer from "./features/movie/movieSlice";
 
 export const makeStore = () => {
   return configureStore({
-    reducer: {},
+    reducer: {
+      movie: movieReducer,
+    },
   });
 };
 
