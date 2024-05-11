@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import movieReducer from "./features/movie/movieSlice";
+import characterReducer from "./features/character/characterSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       movie: movieReducer,
+      character: characterReducer,
     },
   });
 };
