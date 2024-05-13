@@ -4,7 +4,19 @@ import axios from "axios";
 export const fetchCharacters = createAsyncThunk(
   "characters/fetchCharacters",
   async () => {
-    const response = await axios.get("https://swapi.dev/api/people");
+    const response = await axios.get(
+      "https://swapi.dev/api/people"
+    );
+    return response.data.results;
+  }
+);
+
+export const fetchMoreCharacters = createAsyncThunk(
+  "characters/fetchMoreCharacters",
+  async (page: number) => {
+    const response = await axios.get(
+      `https://swapi.dev/api/people?page=${page}`
+    );
     return response.data.results;
   }
 );

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Character, CharacterDetail } from "@/interfaces/character";
-import { fetchCharacters, fetchCharacterById } from "./characterThunk";
+import { fetchCharacters, fetchMoreCharacters, fetchCharacterById } from "./characterThunk";
 
 interface CharacterState {
   characters: Character[];
@@ -34,6 +34,21 @@ const characterSlice = createSlice({
           state.isLoading = false;
           state.allCharacters = action.payload;
           state.characters = action.payload;
+        }
+      )
+      .addCase(fetchMoreCharacters.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.error;
+      })
+      .addCase(fetchMoreCharacters.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        fetchMoreCharacters.fulfilled,
+        (state, action: PayloadAction<Character[]>) => {
+          state.isLoading = false;
+          state.allCharacters = [...state.allCharacters, ...action.payload];
+          state.characters = [...state.allCharacters, ...action.payload];
         }
       )
       .addCase(fetchCharacters.rejected, (state, action) => {
