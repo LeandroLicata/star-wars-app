@@ -1,18 +1,42 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CharacterCard from "@/components/CharacterCard";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { useEffect } from "react";
-import { fetchCharacters } from "@/lib/features/character/characterThunk";
+import {
+  fetchCharacters,
+  fetchMoreCharacters,
+} from "@/lib/features/character/characterThunk";
+import { useInView } from "react-intersection-observer";
+import Image from "next/image";
+
+let page = 2;
 
 const CharactersPage = () => {
   const characters = useAppSelector((state) => state.character.characters);
+  const isLoading = useAppSelector((state) => state.character.isLoading);
   const dispatch = useAppDispatch();
+  const { ref, inView } = useInView();
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCharacters());
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    if (inView && !isLoadingMore && page <= 9) {
+      const delay = 500;
+      const timeoutId = setTimeout(() => {
+        setIsLoadingMore(true);
+        dispatch(fetchMoreCharacters(page)).then(() => {
+          setIsLoadingMore(false);
+          page++;
+        });
+      }, delay);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [inView, isLoadingMore]);
+  
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black bg-opacity-90 py-4">
@@ -30,6 +54,19 @@ const CharactersPage = () => {
             />
           ))}
       </div>
+      <section className="flex justify-center items-center w-full">
+        <div ref={ref}>
+          {inView && isLoading && (
+            <Image
+              src="/loading.gif"
+              alt="loading"
+              width={56}
+              height={56}
+              className="object-contain my-3"
+            />
+          )}
+        </div>
+      </section>
     </div>
   );
 };
