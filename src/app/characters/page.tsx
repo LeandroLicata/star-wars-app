@@ -5,14 +5,12 @@ import { useInView } from "react-intersection-observer";
 import Image from "next/image";
 import useCharacters from "@/hooks/useCharacters";
 
-let page = 2;
-
 const CharactersPage = () => {
   const { ref, inView } = useInView();
   const { characters, isLoading } = useCharacters(inView);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-black bg-opacity-90 py-4">
+    <div className="flex flex-col items-center min-h-screen bg-black bg-opacity-90 py-4">
       <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 text-yellow-400 text-center">
         Star Wars Characters
       </h1>
@@ -24,6 +22,7 @@ const CharactersPage = () => {
               name={character.name}
               eye_color={character.eye_color}
               gender={character.gender}
+              url={character.url}
             />
           ))}
       </div>
@@ -31,10 +30,10 @@ const CharactersPage = () => {
         <div ref={ref}>
           {inView && isLoading && (
             <Image
-              src="/loading.gif"
+              src="/images/loading.gif"
               alt="loading"
-              width={56}
-              height={56}
+              width={108}
+              height={108}
               className="object-contain my-3"
             />
           )}
