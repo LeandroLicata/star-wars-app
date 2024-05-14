@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { Character, CharacterDetail } from "@/interfaces/character";
-import { fetchCharacters, fetchMoreCharacters, fetchCharacterById } from "./characterThunk";
+import {
+  fetchCharacters,
+  fetchMoreCharacters,
+  fetchCharacterById,
+} from "./characterThunk";
 
 interface CharacterState {
   characters: Character[];
@@ -22,7 +26,34 @@ const initialState: CharacterState = {
 const characterSlice = createSlice({
   name: "character",
   initialState,
-  reducers: {},
+  reducers: {
+    filterCharacters: (
+      state,
+      action: PayloadAction<{ eyeColor: string; gender: string }>
+    ) => {
+      const { eyeColor, gender } = action.payload;
+      const allCharacters = state.allCharacters;
+
+      let filteredCharacters = allCharacters;
+
+      if (eyeColor !== "all") {
+        filteredCharacters = filteredCharacters.filter(
+          (character) => character.eye_color === eyeColor
+        );
+      }
+
+      if (gender !== "all") {
+        filteredCharacters = filteredCharacters.filter(
+          (character) => character.gender === gender
+        );
+      }
+
+      return {
+        ...state,
+        characters: filteredCharacters,
+      };
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchCharacters.pending, (state) => {
@@ -47,7 +78,12 @@ const characterSlice = createSlice({
         fetchMoreCharacters.fulfilled,
         (state, action: PayloadAction<Character[]>) => {
           state.isLoading = false;
-          const newCharacters = action.payload.filter(character => !state.allCharacters.some(existingCharacter => existingCharacter.name === character.name));
+          const newCharacters = action.payload.filter(
+            (character) =>
+              !state.allCharacters.some(
+                (existingCharacter) => existingCharacter.name === character.name
+              )
+          );
           state.allCharacters = [...state.allCharacters, ...newCharacters];
           state.characters = [...state.allCharacters];
         }
@@ -72,5 +108,7 @@ const characterSlice = createSlice({
       });
   },
 });
+
+export const { filterCharacters } = characterSlice.actions;
 
 export default characterSlice.reducer;
