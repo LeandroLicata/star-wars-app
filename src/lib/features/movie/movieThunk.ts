@@ -9,7 +9,7 @@ export const fetchMovies = createAsyncThunk("movies/fetchMovies", async () => {
 
 export const fetchMovieById = createAsyncThunk(
   "movies/fetchMovieById",
-  async (id: number) => {
+  async (id: string) => {
     const response = await axios.get(`https://swapi.dev/api/films/${id}`);
     return response.data;
   }
