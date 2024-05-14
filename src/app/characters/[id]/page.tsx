@@ -8,8 +8,16 @@ const CharacterDetailPage = ({ params }: { params: { id: string } }) => {
   const { character, isLoading } = useCharacterDetail(params.id);
   const router = useRouter();
 
-  const handleGoBack = () => {
-    router.back();
+  const handleGoToCharacters = () => {
+    router.push("/characters");
+  };
+
+  const handleGoToFilms = () => {
+    router.push("/films");
+  };
+
+  const handleGoToLanding = () => {
+    router.push("/");
   };
 
   return (
@@ -47,12 +55,26 @@ const CharacterDetailPage = ({ params }: { params: { id: string } }) => {
           <div className="mb-2 text-white">
             <span className="font-bold">Mass:</span> {character?.mass}
           </div>
-          <button
-            onClick={handleGoBack}
-            className="bg-yellow-400 text-black font-bold py-2 px-4 rounded mt-4 hover:bg-yellow-500"
-          >
-            Back
-          </button>
+          <div className="flex justify-between">
+            <button
+              onClick={handleGoToCharacters}
+              className="bg-yellow-400 text-black font-bold py-2 px-4 rounded mt-4 hover:bg-yellow-500"
+            >
+              Go to Characters
+            </button>
+            <button
+              onClick={handleGoToFilms}
+              className="bg-yellow-400 text-black font-bold py-2 px-4 rounded mt-4 hover:bg-yellow-500"
+            >
+              Go to Films
+            </button>
+            <button
+              onClick={handleGoToLanding}
+              className="bg-yellow-400 text-black font-bold py-2 px-4 rounded mt-4 hover:bg-yellow-500"
+            >
+              Return to Home
+            </button>
+          </div>
         </div>
       </div>
     </div>

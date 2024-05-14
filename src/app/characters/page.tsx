@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import CharacterCard from "@/components/CharacterCard";
 import { useInView } from "react-intersection-observer";
 import useCharacters from "@/hooks/useCharacters";
@@ -10,6 +11,7 @@ import { useAppDispatch } from "@/lib/hooks";
 const CharactersPage = () => {
   const dispatch = useAppDispatch();
   const { ref, inView } = useInView();
+  const router = useRouter();
 
   const eyeColors = [
     "all",
@@ -48,8 +50,30 @@ const CharactersPage = () => {
     );
   };
 
+  const handleGoToFilms = () => {
+    router.push("/films");
+  };
+
+  const handleGoToHome = () => {
+    router.push("/");
+  };
+
   return (
     <div className="flex flex-col items-center min-h-screen bg-black bg-opacity-90 py-4">
+      <div className="flex justify-between w-full max-w-6xl mb-4">
+        <button
+          onClick={handleGoToFilms}
+          className="bg-yellow-400 text-black font-bold py-2 px-4 rounded mt-4 hover:bg-yellow-500"
+        >
+          Films
+        </button>
+        <button
+          onClick={handleGoToHome}
+          className="bg-yellow-400 text-black font-bold py-2 px-4 rounded mt-4 hover:bg-yellow-500"
+        >
+          Home
+        </button>
+      </div>
       <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 text-yellow-400 text-center">
         Star Wars Characters
       </h1>
