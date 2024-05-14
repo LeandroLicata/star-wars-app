@@ -1,12 +1,38 @@
 "use client";
-
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useMovieDetail from "@/hooks/useMovieDetail";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 const FilmDetailPage = ({ params }: { params: { id: string } }) => {
   const { movie, isLoading } = useMovieDetail(params.id);
   const router = useRouter();
+  const [charactersData, setCharactersData] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchCharactersData = async () => {
+      if (movie && movie.characters) {
+        try {
+          const charactersPromises = movie.characters.map(
+            (characterUrl: string) => axios.get(characterUrl)
+          );
+          const charactersResponses = await Promise.all(charactersPromises);
+          const modifiedCharactersData = charactersResponses.map((response) => {
+            const id = response.data.url.match(/\/(\d+)\/$/)?.[1];
+            return {
+              ...response.data,
+              url: `/characters/${id}`,
+            };
+          });
+          setCharactersData(modifiedCharactersData);
+        } catch (error) {
+          console.error("Error fetching characters:", error);
+        }
+      }
+    };
+
+    fetchCharactersData();
+  }, [movie]);
 
   const handleGoBack = () => {
     router.back();
@@ -21,7 +47,7 @@ const FilmDetailPage = ({ params }: { params: { id: string } }) => {
           </div>
           <div className="flex justify-center mb-4">
             <img
-              src="/images/baby-yoda.jpg"
+              src="/images/star-wars-movies.jpeg"
               alt="Character"
               className="w-full h-auto rounded-lg"
             />
@@ -31,6 +57,23 @@ const FilmDetailPage = ({ params }: { params: { id: string } }) => {
           </div>
           <div className="mb-2 text-white">
             <span className="font-bold">Director:</span> {movie?.director}
+          </div>
+          <div className="mb-4 text-white">
+            <span className="font-bold">Characters:</span>
+            <ul>
+              {charactersData.map((character: any) => (
+                <li key={character.url}>
+                  <a href={character.url} className="text-blue-500">
+                    {character.name}
+                  </a>
+                  <img
+                    src="/images/baby-yoda.jpg"
+                    alt="Character"
+                    className="w-8 h-8 inline-block ml-2"
+                  />
+                </li>
+              ))}
+            </ul>
           </div>
           <button
             onClick={handleGoBack}
