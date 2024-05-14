@@ -47,8 +47,9 @@ const characterSlice = createSlice({
         fetchMoreCharacters.fulfilled,
         (state, action: PayloadAction<Character[]>) => {
           state.isLoading = false;
-          state.allCharacters = [...state.allCharacters, ...action.payload];
-          state.characters = [...state.allCharacters, ...action.payload];
+          const newCharacters = action.payload.filter(character => !state.allCharacters.some(existingCharacter => existingCharacter.name === character.name));
+          state.allCharacters = [...state.allCharacters, ...newCharacters];
+          state.characters = [...state.allCharacters];
         }
       )
       .addCase(fetchCharacters.rejected, (state, action) => {
