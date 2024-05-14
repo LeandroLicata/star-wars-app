@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import useMovieDetail from "@/hooks/useMovieDetail";
 import { useRouter } from "next/navigation";
@@ -68,16 +69,19 @@ const FilmDetailPage = ({ params }: { params: { id: string } }) => {
           </div>
           <div className="mb-4 text-white">
             <span className="font-bold">Characters:</span>
-            <ul>
+            <ul className="mt-2">
               {charactersData.map((character: any) => (
-                <li key={character.url}>
-                  <a href={character.url} className="text-blue-500">
+                <li key={character.url} className="flex items-center">
+                  <a
+                    href={character.url}
+                    className="text-blue-500 hover:underline"
+                  >
                     {character.name}
                   </a>
                   <img
                     src="/images/baby-yoda.jpg"
                     alt="Character"
-                    className="w-8 h-8 inline-block ml-2"
+                    className="w-8 h-8 ml-2 rounded-full"
                   />
                 </li>
               ))}
