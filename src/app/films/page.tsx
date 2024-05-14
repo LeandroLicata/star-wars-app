@@ -1,18 +1,10 @@
 "use client";
 
-import React from "react";
 import FilmCard from "@/components/FilmCard";
-import { useAppSelector, useAppDispatch } from "@/lib/hooks";
-import { useEffect } from "react";
-import { fetchMovies } from "@/lib/features/movie/movieThunk";
+import useMovies from "@/hooks/useMovies";
 
 const FilmsPage = () => {
-  const movies = useAppSelector((state) => state.movie.movies);
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(fetchMovies());
-  }, [dispatch]);
+  const { movies } = useMovies();
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-black bg-opacity-90 py-4">
