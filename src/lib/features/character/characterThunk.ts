@@ -23,7 +23,7 @@ export const fetchMoreCharacters = createAsyncThunk(
 
 export const fetchCharacterById = createAsyncThunk(
   "characters/fetchCharacterById",
-  async (id: number) => {
+  async (id: string) => {
     const response = await axios.get(`https://swapi.dev/api/people/${id}`);
     return response.data;
   }
